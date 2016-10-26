@@ -1,0 +1,33 @@
+{
+  "name": "Solidity project boilerplate",
+  "version": "0.0.1",
+  "description": "Project boilerplate for Ethereum's Solidity programming language with truffle",
+  "scripts": {
+    "dev": "node ./watch-tests.js",
+    "test": "node ./node_modules/truffle/cli.js test test/index.js",
+    "console": "node ./node_modules/truffle/cli.js console --network development",
+    "server": "testrpc -p 8546",
+    "compile": "rm -rf ./build; node ./node_modules/truffle/cli.js compile --network development",
+    "inspect": "node --inspect --debug-brk ./node_modules/truffle/cli.js test",
+    "deploy": "node ./node_modules/truffle/cli.js migrate --reset --network development"
+  },
+  "devDependencies": {
+    "@digix/contest": "^0.0.1",
+    "@digix/sigmate": "^1.0.3",
+    "@digix/tempo": "^0.0.3",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-2": "^6.17.0",
+    "chokidar": "^1.6.0",
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
+    "multi-hash": "^0.1.1",
+    "truffle": "^2.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DigixGlobal/solidity-boilerplate.git"
+  }
+}
