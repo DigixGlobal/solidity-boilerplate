@@ -1,5 +1,5 @@
 {
-  "name": "Solidity project boilerplate",
+  "name": "solidity-boilerplate",
   "version": "0.0.1",
   "description": "Project boilerplate for Ethereum's Solidity programming language with truffle",
   "scripts": {
