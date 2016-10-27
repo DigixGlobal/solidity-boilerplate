@@ -1,0 +1,28 @@
+extends:
+  eslint-config-airbnb
+
+settings:
+  ecmascript: 6
+
+env:
+  mocha: true
+
+# preferred rules for testing with mocha
+rules:
+  max-len: 0
+  func-names: 0
+  no-console: 0
+  prefer-arrow-callback: 0
+  arrow-body-style: 0
+  new-cap: 0
+  no-underscore-dangle: 0
+
+globals:
+  contract: true
+  it: true
+  assert: true
+  contracts: true
+  accounts: true
+  web3: true
+  tempo: true
+  contest: true
