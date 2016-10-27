@@ -15,8 +15,10 @@ contract DepositAddress is ACGroups, Constants, ResolverClient {
         owner = msg.sender;
         registerAdmin(msg.sender);
         resolver = _resolver;
-        addUserToGroup("authorized", msg.sender);
-        addUserToGroup("authorized", _firstauthorized);
+        addUserToGroup("senders", msg.sender);
+        addUserToGroup("senders", _firstauthorized);
+        addUserToGroup("recipients", msg.sender);
+        addUserToGroup("recipients", _firstauthorized);
         isGroupsInit = true;
     }
 
@@ -57,7 +59,7 @@ contract DepositAddress is ACGroups, Constants, ResolverClient {
         return _remaining;
     }
 
-    function tokenApprove(string _tokensymbol, address _spender, uint256 _value) ifGroup("authorized") returns (bool _success) {
+    function tokenApprove(string _tokensymbol, address _spender, uint256 _value) ifGroup("senders") returns (bool _success) {
         address _tokencontract = Bank(getContract("s:tbank")).getTokenContractAddressFromSymbol(_tokensymbol);
         if (_tokencontract == NULL_ADDRESS) {
             _success = false;
@@ -67,7 +69,7 @@ contract DepositAddress is ACGroups, Constants, ResolverClient {
         return _success;
     }
 
-    function tokenWithdraw(string _tokensymbol, address _recipient, uint256 _amount) ifGroup("admins") ifUserIsMemberOf(_recipient, "authorized") returns (bool _success) {
+    function tokenWithdraw(string _tokensymbol, address _recipient, uint256 _amount) ifGroup("senders") ifUserIsMemberOf(_recipient, "recipients") returns (bool _success) {
         address _tokencontract = Bank(getContract("s:tbank")).getTokenContractAddressFromSymbol(_tokensymbol);
         if (_tokencontract == NULL_ADDRESS) {
             _success = false;
@@ -77,12 +79,12 @@ contract DepositAddress is ACGroups, Constants, ResolverClient {
         return _success;
     }
 
-    function etherWithdraw(address _recipient, uint256 _amount) ifGroup("admins") ifUserIsMemberOf(_recipient, "authorized") returns (bool _success) {
+    function etherWithdraw(address _recipient, uint256 _amount) ifGroup("senders") ifUserIsMemberOf(_recipient, "recipients") returns (bool _success) {
        _success = _recipient.send(_amount); 
        return _success;
     }
 
-    function etherWithdrawWithGas(address _recipient, uint256 _amount, uint256 _gasamount) ifGroup("admins") ifUserIsMemberOf(_recipient, "authorized") returns (bool _success) {
+    function etherWithdrawWithGas(address _recipient, uint256 _amount, uint256 _gasamount) ifGroup("senders") ifUserIsMemberOf(_recipient, "recipients") returns (bool _success) {
         if (msg.gas < _gasamount) {
             _success = false;
         } else {

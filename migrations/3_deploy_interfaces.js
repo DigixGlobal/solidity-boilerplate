@@ -7,4 +7,7 @@ module.exports = (deployer) => {
   deployer.deploy([
     [TokenBankController, ContractResolver.address],
   ]);
+  deployer.deploy([
+    [TokenBankInterface, ContractResolver.address],
+  ]);
 };

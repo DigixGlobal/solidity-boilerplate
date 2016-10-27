@@ -6,6 +6,8 @@ module.exports = (deployer) => {
     DoublyLinkedList,
   ]);
   deployer.deploy([
+    ACGroups,
+    ACConditions,
     ACDates,
     ACOwned,
     ACSimpleMutex,
