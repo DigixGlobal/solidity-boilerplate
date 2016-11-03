@@ -1,9 +1,9 @@
 {
   "name": "solidity-boilerplate",
   "version": "0.0.1",
-  "description": "Project boilerplate for Ethereum's Solidity programming language with truffle",
+  "description": "Project Boilerplate for Solidity",
   "scripts": {
-    "dev": "node ./watch-tests.js",
+    "dev": "node ./scripts/watch-tests.js",
     "test": "node ./node_modules/truffle/cli.js test test/index.js",
     "server": "testrpc -p 6545",
     "testsuite": "npm run server & npm run test",
@@ -16,6 +16,7 @@
     "docs:publish": "node_modules/.bin/doxity publish",
     "docs:build": "node_modules/.bin/doxity build"
   },
+  "author": "DigixGlobal",
   "devDependencies": {
     "@digix/contest": "^0.0.3",
     "@digix/doxity": "^0.1.1",

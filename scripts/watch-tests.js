@@ -5,8 +5,8 @@ const exec = require('child_process').exec;
 let running = false;
 
 chokidar.watch([
-  path.join(__dirname, 'test/**/*'),
-  path.join(__dirname, 'contracts/**/*'),
+  path.join(process.env.PWD, 'test/**/*'),
+  path.join(process.env.PWD, 'contracts/**/*'),
 ], {
   ignored: /[\/\\]\./, // Ignore files prefixed with "."
   ignoreInitial: false,
