@@ -3,11 +3,11 @@ import StandardToken from './unittest/StandardToken';
 import Token from './unittest/Token';
 
 export const some = {
-  MyToken,
-  Token,
+  StandardToken,
 };
 
 export const all = {
   ...some,
-  StandardToken,
+  MyToken,
+  Token,
 };
