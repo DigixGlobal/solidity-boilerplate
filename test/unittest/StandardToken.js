@@ -6,49 +6,50 @@ export default function ({ accounts, contracts }) {
     // initial amount
     [accounts[0]]: initialAmount,
     [accounts[1]]: 0,
-    [accounts[3]]: 0,
+    [accounts[2]]: 0,
   }, {
     // amount after transfers
     [accounts[0]]: 0,
     [accounts[1]]: initialAmount - diffAmount,
-    [accounts[3]]: diffAmount,
+    [accounts[2]]: diffAmount,
   }];
 
   contest.
   deploy(contracts.TestStandardToken, [balances[0][accounts[0]], { from: accounts[0] }])
-  // ensure initialisation values are correct
+
+  .describe('Initialization values')
   ._('balanceOf', 'has correct initialization balance', balances[0])
-  // make a bad transfer and ensure it gets mined
+
+  .describe('Transfers')
   ._('transfer transaction', 'does not throw when sender is not owner', [
     [accounts[1], balances[1][accounts[1]], { from: accounts[1] }],
   ])
-  // ensure previous bad transfer does not update the balances
   ._('balanceOf', 'did not make the transfer when sender was not owner', balances[0])
-  // make a bad transfer and ensure it gets mined
   ._('transfer transaction', 'does not throw when sender does not have enough balance', [
     [accounts[1], balances[0][accounts[0]] + 1, { from: accounts[0] }],
   ])
-  // ensure previous bad transfer does not update the balances
   ._('balanceOf', 'did not make the transfer when sender did not have enough balance', balances[0])
-  // now test if things go well
+  ._('Transfer event', 'fires the events on transfer', [
+    { _from: accounts[0], _to: accounts[1], _value: balances[1][accounts[1]] },
+    { _from: accounts[0], _to: accounts[2], _value: balances[1][accounts[2]] },
+  ])
   ._('transfer transaction', 'good transfers do not throw', [
     [accounts[1], balances[1][accounts[1]], { from: accounts[0] }],
-    [accounts[3], balances[1][accounts[3]], { from: accounts[0] }],
+    [accounts[2], balances[1][accounts[2]], { from: accounts[0] }],
   ])
-  // ensure that the balances are correct after succesful transfers
   ._('balanceOf', 'has the correct balance', balances[1])
-  // make a bad transfer and ensure it gets mined
   ._('transfer transaction', 'does not throw when sender balance is zero', [
     [accounts[1], 1, { from: accounts[0] }],
   ])
-  // ensure previous bad transfer does not update the balances
   ._('balanceOf', 'did not make the transfer when balance was zero', balances[1])
-  // send the balances back
   ._('transfer transaction', 'good transfers do not throw from other users sending', [
     [accounts[0], balances[1][accounts[1]], { from: accounts[1] }],
-    [accounts[0], balances[1][accounts[3]], { from: accounts[3] }],
+    [accounts[0], balances[1][accounts[2]], { from: accounts[2] }],
   ])
   ._('balanceOf', 'other users can send back their value', balances[0])
+
+  .describe('')
+
   .done();
 
   // now we deal with transferFrom
