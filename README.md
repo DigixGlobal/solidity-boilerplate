@@ -9,5 +9,12 @@ Boilerplate project for Ethereum's Solidity programming language.
 * Have node installed
 * Clone this project
 * `npm i`
-* Developing: `npm run dev`
-* Tests: `npm run testsuite`
+* Develop `npm run dev`
+* Test `npm run test`
+
+## TODO
+
+* Deployment
+* Document all methods
+* Tests
+* Atom/Solium integration https://github.com/duaraghav8/Solium/pull/40

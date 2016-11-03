@@ -1,0 +1,7 @@
+linkPrefix = ""
+compiler = "0.4.2+commit.af6afb04.Darwin.appleclang"
+name = "solidity-boilerplate"
+version = "0.0.1"
+description = "Project boilerplate for Ethereum's Solidity programming language with truffle"
+buildTime = 2016-10-31T20:06:08.209Z
+author = "DigixGlobal"
