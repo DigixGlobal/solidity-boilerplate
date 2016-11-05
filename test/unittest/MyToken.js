@@ -6,10 +6,10 @@ export default function ({ accounts, contracts }) {
 
   contest
   .deploy(contracts.MyToken, [startingAmount, name, decimals, symbol, { from: accounts[0] }])
-  ._('has the correct initializaton values', {
+  .call('has the correct initializaton values', {
     name, decimals, symbol,
   })
-  ._('balanceOf', 'initializes with the correct balances', {
+  .call('balanceOf', 'initializes with the correct balances', {
     [accounts[0]]: startingAmount,
     [accounts[1]]: 0,
   })

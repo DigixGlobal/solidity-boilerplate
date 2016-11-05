@@ -18,13 +18,15 @@ export default function ({ web3, accounts, contracts }) {
   // creation: should succeed in creating over 2^256 - 1 (max) tokens"
   contest
   .deploy(contracts.TestStandardToken, [maxTokens, { from: accounts[0] }])
-  ._('balanceOf', 'deploys with max tokens', { [accounts[0]]: maxTokens })
+  .call('balanceOf', 'deploys with max tokens', { [accounts[0]]: maxTokens })
+  .done();
   // // creation: should create an initial balance of 10000 for the creator"
+  contest
   .deploy(contracts.TestStandardToken, [balances[0][accounts[0]], { from: accounts[0] }])
-  ._('balanceOf', 'deploys with supplied balance', balances[0])
+  .call('balanceOf', 'deploys with supplied balance', balances[0])
   //
   .describe('Transfers and Balances')
-  ._('transfer transaction', 'does not throw when doesnt have any balance', [
+  .tx('transfer', 'does not throw when doesnt have any balance', [
     [accounts[1], balances[1][accounts[1]], { from: accounts[1] }],
   ])
   // transfers: ether transfer should be reversed.
@@ -37,36 +39,37 @@ export default function ({ web3, accounts, contracts }) {
     });
   })
   // transfers: should fail when trying to transfer zero. (using call)
-  ._('transfer', 'call trasnfer returns false when sender doesnt have any balance', [
+  .call('transfer', 'call trasnfer returns false when sender doesnt have any balance', [
     [[accounts[1], balances[1][accounts[1]], { from: accounts[1] }], [false]],
   ])
-  ._('balanceOf', 'did not make the transfer when sender has no balance', balances[0])
-  ._('transfer transaction', 'does not throw when sender does not have enough balance', [
+  .call('balanceOf', 'did not make the transfer when sender has no balance', balances[0])
+  .tx('transfer', 'does not throw when sender does not have enough balance', [
     [accounts[1], balances[0][accounts[0]] + 1, { from: accounts[0] }],
   ])
-  ._('balanceOf', 'did not make the transfer when sender did not have enough balance', balances[0])
+  .call('balanceOf', 'did not make the transfer when sender did not have enough balance', balances[0])
   // // hey, it's an event assersion!
-  ._('Transfer event', 'fires the events on transfer', [
+  .watch('Transfer', 'fires the events on transfer', [
     { _from: accounts[0], _to: accounts[1], _value: balances[1][accounts[1]] },
     { _from: accounts[0], _to: accounts[2], _value: balances[1][accounts[2]] },
   ])
-  ._('transfer transaction', 'good transfers do not throw', [
+  .tx('transfer', 'good transfers do not throw', [
     [accounts[1], balances[1][accounts[1]], { from: accounts[0] }],
     [accounts[2], balances[1][accounts[2]], { from: accounts[0] }],
   ])
-  ._('balanceOf', 'has the correct balance after transfers', balances[1])
-  ._('transfer transaction', 'does not throw when sender balance is zero', [
+  .call('balanceOf', 'has the correct balance after transfers', balances[1])
+  .tx('transfer', 'does not throw when sender balance is zero', [
     [accounts[1], 1, { from: accounts[0] }],
   ])
-  ._('balanceOf', 'did not make the transfer when balance was zero', balances[1])
-  ._('transfer transaction', 'good transfers do not throw from other users sending', [
+  .call('balanceOf', 'did not make the transfer when balance was zero', balances[1])
+  .tx('transfer', 'good transfers do not throw from other users sending', [
     [accounts[0], balances[1][accounts[1]], { from: accounts[1] }],
     [accounts[0], balances[1][accounts[2]], { from: accounts[2] }],
   ])
-  ._('balanceOf', 'other users can send back their value', balances[0])
-  //
+  // new ting
   .describe('Approvals')
-  ._('allowance', 'default allowances are set to zero', [
+  .deploy(contracts.TestStandardToken, [balances[0][accounts[0]], { from: accounts[0] }])
+  .call('balanceOf', 'deploys with supplied balance', balances[0])  //
+  .call('allowance', 'default allowances are set to zero', [
     [[accounts[0], accounts[1]], [0]],
     [[accounts[0], accounts[2]], [0]],
     [[accounts[1], accounts[0]], [0]],
@@ -75,82 +78,82 @@ export default function ({ web3, accounts, contracts }) {
     [[accounts[2], accounts[1]], [0]],
   ])
   // approvals: msg.sender should approve 100 to accounts[1]
-  ._('Approval event', 'fires when user is approved', [
+  .watch('Approval', 'fires when user is approved', [
     { _owner: accounts[0], _spender: accounts[1], _value: 100 },
   ])
-  ._('approve transaction', 'allowance transaction succeeds', [
+  .tx('approve', 'allowance transaction succeeds', [
     [accounts[1], 100, { from: accounts[0] }],
   ])
-  ._('allowance', 'allowance balance is updated', [
+  .call('allowance', 'allowance balance is updated', [
     [[accounts[0], accounts[1]], [100]],
   ])
   // approvals: approve max (2^256 - 1)
-  ._('approve transaction', 'allowance transaction succeeds with maximum allowance', [
+  .tx('approve', 'allowance transaction succeeds with maximum allowance', [
     [accounts[1], maxTokens, { from: accounts[2] }],
   ])
-  ._('allowance', 'allowance balance is updated with maximium allowance', [
+  .call('allowance', 'allowance balance is updated with maximium allowance', [
     [[accounts[2], accounts[1]], [maxTokens]],
   ])
   // approvals: msg.sender approves accounts[1] of 100 & withdraws 20 once.
-  ._('transferFrom transaction', 'withdraw transaction succeeds', [
+  .tx('transferFrom', 'withdraw transaction succeeds', [
     [accounts[0], accounts[1], 20, { from: accounts[1] }],
   ])
-  ._('allowance', 'allowance balances are correct after withdraw', [
+  .call('allowance', 'allowance balances are correct after withdraw', [
     [[accounts[0], accounts[1]], [80]],
   ])
-  ._('balanceOf', 'actual balances are correct after withdraw', {
+  .call('balanceOf', 'actual balances are correct after withdraw', {
     [accounts[0]]: initialAmount - 20,
     [accounts[1]]: 20,
   })
   // approvals: msg.sender approves accounts[1] of 100 & withdraws 20 twice.
-  ._('transferFrom transaction', '2nd withdraw transaction succeeds', [
+  .tx('transferFrom', '2nd withdraw transaction succeeds', [
     [accounts[0], accounts[1], 20, { from: accounts[1] }],
   ])
-  ._('allowance', 'allowance balances are correct after 2nd withdraw', [
+  .call('allowance', 'allowance balances are correct after 2nd withdraw', [
     [[accounts[0], accounts[1]], [60]],
   ])
-  ._('balanceOf', 'actual balances are correct after 2nd withdraw', {
+  .call('balanceOf', 'actual balances are correct after 2nd withdraw', {
     [accounts[0]]: initialAmount - 40,
     [accounts[1]]: 40,
   })
   // approvals: msg.sender approves accounts[1] of 100 & withdraws 50 & 60 (2nd tx should fail)
-  ._('transferFrom transaction', '3rd (failed) withdraw does not throw', [
+  .tx('transferFrom', '3rd (failed) withdraw does not throw', [
     [accounts[0], accounts[1], 100, { from: accounts[1] }],
   ])
-  ._('allowance', 'allowance balances are correct after 3rd (failed) withdraw', [
+  .call('allowance', 'allowance balances are correct after 3rd (failed) withdraw', [
     [[accounts[0], accounts[1]], [60]],
   ])
-  ._('balanceOf', 'actual balances are correct after 3rd (failed) withdraw', {
+  .call('balanceOf', 'actual balances are correct after 3rd (failed) withdraw', {
     [accounts[0]]: initialAmount - 40,
     [accounts[1]]: 40,
   })
   // approvals: attempt withdrawal from acconut with no allowance (should fail)
-  ._('transferFrom', 'attempt to call withdraw from zero allowance fails', [
+  .call('transferFrom', 'attempt to call withdraw from zero allowance fails', [
     [[accounts[0], accounts[2], 5, { from: accounts[2] }], [false]],
   ])
-  ._('transferFrom', 'attempt to transact withdraw from zero allowance doesnt throw', [
+  .call('transferFrom', 'attempt to transact withdraw from zero allowance doesnt throw', [
     [accounts[0], accounts[2], 5, { from: accounts[2] }],
   ])
-  ._('balanceOf', 'actual balance after failed withdraw attempt is zero', {
+  .call('balanceOf', 'actual balance after failed withdraw attempt is zero', {
     [accounts[2]]: 0,
   })
   // 4th witdhrawl should fail (zero allowance after having one)
-  ._('Approval event', 'fires when user is approved', [
+  .watch('Approval', 'fires when user is approved', [
     { _owner: accounts[0], _spender: accounts[1], _value: 0 },
   ])
-  ._('approve transaction', 'allowance transaction succeeds', [
+  .tx('approve', 'allowance transaction succeeds', [
     [accounts[1], 0, { from: accounts[0] }],
   ])
-  ._('allowance', 'allowance balances are correct after setting balance', [
+  .call('allowance', 'allowance balances are correct after setting balance', [
     [[accounts[0], accounts[1]], [0]],
   ])
-  ._('transferFrom', 'attempt to call withdraw from zero allowance fails', [
+  .call('transferFrom', 'attempt to call withdraw from zero allowance fails', [
     [[accounts[0], accounts[1], 20, { from: accounts[1] }], [false]],
   ])
-  ._('transferFrom transaction', '3rd (failed) withdraw does not throw', [
+  .tx('transferFrom', '3rd (failed) withdraw does not throw', [
     [accounts[0], accounts[1], 20, { from: accounts[1] }],
   ])
-  ._('balanceOf', 'actual balances are correct after 4th (failed) withdraw', {
+  .call('balanceOf', 'actual balances are correct after 4th (failed) withdraw', {
     [accounts[0]]: initialAmount - 40,
     [accounts[1]]: 40,
   })
