@@ -1,38 +1,38 @@
-export default function ({ web3, accounts, contracts }) {
+export default function ({ users, web3, contracts }) {
   const initialAmount = 1024 + Math.ceil(Math.random() * 1024);
   const diffAmount = 500 + Math.ceil(Math.random() * 200);
   const maxTokens = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
 
   const balances = [{
     // initial amount
-    [accounts[0]]: initialAmount,
-    [accounts[1]]: 0,
-    [accounts[2]]: 0,
+    [users.deployer]: initialAmount,
+    [users.user1]: 0,
+    [users.user2]: 0,
   }, {
     // amount after transfers
-    [accounts[0]]: 0,
-    [accounts[1]]: initialAmount - diffAmount,
-    [accounts[2]]: diffAmount,
+    [users.deployer]: 0,
+    [users.user1]: initialAmount - diffAmount,
+    [users.user2]: diffAmount,
   }];
 
   // creation: should succeed in creating over 2^256 - 1 (max) tokens"
   contest
-  .deploy(contracts.TestStandardToken, [maxTokens, { from: accounts[0] }])
-  .call('balanceOf', 'deploys with max tokens', { [accounts[0]]: maxTokens })
+  .deploy(contracts.TestStandardToken, [maxTokens, { from: users.deployer }])
+  .call('balanceOf', 'deploys with max tokens', { [users.deployer]: maxTokens })
   .done();
   // // creation: should create an initial balance of 10000 for the creator"
   contest
-  .deploy(contracts.TestStandardToken, [balances[0][accounts[0]], { from: accounts[0] }])
+  .deploy(contracts.TestStandardToken, [balances[0][users.deployer], { from: users.deployer }])
   .call('balanceOf', 'deploys with supplied balance', balances[0])
   //
   .describe('Transfers and Balances')
   .tx('transfer', 'does not throw when doesnt have any balance', [
-    [accounts[1], balances[1][accounts[1]], { from: accounts[1] }],
+    [users.user1, balances[1][users.user1], { from: users.user1 }],
   ])
   // transfers: ether transfer should be reversed.
   .it('doesnt accept ether transfers', function (instnace) {
     return new Promise((resolve) => {
-      web3.eth.sendTransaction({ from: accounts[0], to: instnace.address, value: 1 }, (err) => {
+      web3.eth.sendTransaction({ from: users.deployer, to: instnace.address, value: 1 }, (err) => {
         assert.ok(err);
         resolve();
       });
@@ -40,122 +40,122 @@ export default function ({ web3, accounts, contracts }) {
   })
   // transfers: should fail when trying to transfer zero. (using call)
   .call('transfer', 'call trasnfer returns false when sender doesnt have any balance', [
-    [[accounts[1], balances[1][accounts[1]], { from: accounts[1] }], [false]],
+    [[users.user1, balances[1][users.user1], { from: users.user1 }], [false]],
   ])
   .call('balanceOf', 'did not make the transfer when sender has no balance', balances[0])
   .tx('transfer', 'does not throw when sender does not have enough balance', [
-    [accounts[1], balances[0][accounts[0]] + 1, { from: accounts[0] }],
+    [users.user1, balances[0][users.deployer] + 1, { from: users.deployer }],
   ])
   .call('balanceOf', 'did not make the transfer when sender did not have enough balance', balances[0])
   // // hey, it's an event assersion!
   .watch('Transfer', 'fires the events on transfer', [
-    { _from: accounts[0], _to: accounts[1], _value: balances[1][accounts[1]] },
-    { _from: accounts[0], _to: accounts[2], _value: balances[1][accounts[2]] },
+    { _from: users.deployer, _to: users.user1, _value: balances[1][users.user1] },
+    { _from: users.deployer, _to: users.user2, _value: balances[1][users.user2] },
   ])
   .tx('transfer', 'good transfers do not throw', [
-    [accounts[1], balances[1][accounts[1]], { from: accounts[0] }],
-    [accounts[2], balances[1][accounts[2]], { from: accounts[0] }],
+    [users.user1, balances[1][users.user1], { from: users.deployer }],
+    [users.user2, balances[1][users.user2], { from: users.deployer }],
   ])
   .call('balanceOf', 'has the correct balance after transfers', balances[1])
   .tx('transfer', 'does not throw when sender balance is zero', [
-    [accounts[1], 1, { from: accounts[0] }],
+    [users.user1, 1, { from: users.deployer }],
   ])
   .call('balanceOf', 'did not make the transfer when balance was zero', balances[1])
   .tx('transfer', 'good transfers do not throw from other users sending', [
-    [accounts[0], balances[1][accounts[1]], { from: accounts[1] }],
-    [accounts[0], balances[1][accounts[2]], { from: accounts[2] }],
+    [users.deployer, balances[1][users.user1], { from: users.user1 }],
+    [users.deployer, balances[1][users.user2], { from: users.user2 }],
   ])
   // new ting
   .describe('Approvals')
-  .deploy(contracts.TestStandardToken, [balances[0][accounts[0]], { from: accounts[0] }])
+  .deploy(contracts.TestStandardToken, [balances[0][users.deployer], { from: users.deployer }])
   .call('balanceOf', 'deploys with supplied balance', balances[0])  //
   .call('allowance', 'default allowances are set to zero', [
-    [[accounts[0], accounts[1]], [0]],
-    [[accounts[0], accounts[2]], [0]],
-    [[accounts[1], accounts[0]], [0]],
-    [[accounts[1], accounts[2]], [0]],
-    [[accounts[2], accounts[0]], [0]],
-    [[accounts[2], accounts[1]], [0]],
+    [[users.deployer, users.user1], [0]],
+    [[users.deployer, users.user2], [0]],
+    [[users.user1, users.deployer], [0]],
+    [[users.user1, users.user2], [0]],
+    [[users.user2, users.deployer], [0]],
+    [[users.user2, users.user1], [0]],
   ])
-  // approvals: msg.sender should approve 100 to accounts[1]
+  // approvals: msg.sender should approve 100 to users.user1
   .watch('Approval', 'fires when user is approved', [
-    { _owner: accounts[0], _spender: accounts[1], _value: 100 },
+    { _owner: users.deployer, _spender: users.user1, _value: 100 },
   ])
   .tx('approve', 'allowance transaction succeeds', [
-    [accounts[1], 100, { from: accounts[0] }],
+    [users.user1, 100, { from: users.deployer }],
   ])
   .call('allowance', 'allowance balance is updated', [
-    [[accounts[0], accounts[1]], [100]],
+    [[users.deployer, users.user1], [100]],
   ])
   // approvals: approve max (2^256 - 1)
   .tx('approve', 'allowance transaction succeeds with maximum allowance', [
-    [accounts[1], maxTokens, { from: accounts[2] }],
+    [users.user1, maxTokens, { from: users.user2 }],
   ])
   .call('allowance', 'allowance balance is updated with maximium allowance', [
-    [[accounts[2], accounts[1]], [maxTokens]],
+    [[users.user2, users.user1], [maxTokens]],
   ])
-  // approvals: msg.sender approves accounts[1] of 100 & withdraws 20 once.
+  // approvals: msg.sender approves users.user1 of 100 & withdraws 20 once.
   .tx('transferFrom', 'withdraw transaction succeeds', [
-    [accounts[0], accounts[1], 20, { from: accounts[1] }],
+    [users.deployer, users.user1, 20, { from: users.user1 }],
   ])
   .call('allowance', 'allowance balances are correct after withdraw', [
-    [[accounts[0], accounts[1]], [80]],
+    [[users.deployer, users.user1], [80]],
   ])
   .call('balanceOf', 'actual balances are correct after withdraw', {
-    [accounts[0]]: initialAmount - 20,
-    [accounts[1]]: 20,
+    [users.deployer]: initialAmount - 20,
+    [users.user1]: 20,
   })
-  // approvals: msg.sender approves accounts[1] of 100 & withdraws 20 twice.
+  // approvals: msg.sender approves users.user1 of 100 & withdraws 20 twice.
   .tx('transferFrom', '2nd withdraw transaction succeeds', [
-    [accounts[0], accounts[1], 20, { from: accounts[1] }],
+    [users.deployer, users.user1, 20, { from: users.user1 }],
   ])
   .call('allowance', 'allowance balances are correct after 2nd withdraw', [
-    [[accounts[0], accounts[1]], [60]],
+    [[users.deployer, users.user1], [60]],
   ])
   .call('balanceOf', 'actual balances are correct after 2nd withdraw', {
-    [accounts[0]]: initialAmount - 40,
-    [accounts[1]]: 40,
+    [users.deployer]: initialAmount - 40,
+    [users.user1]: 40,
   })
-  // approvals: msg.sender approves accounts[1] of 100 & withdraws 50 & 60 (2nd tx should fail)
+  // approvals: msg.sender approves users.user1 of 100 & withdraws 50 & 60 (2nd tx should fail)
   .tx('transferFrom', '3rd (failed) withdraw does not throw', [
-    [accounts[0], accounts[1], 100, { from: accounts[1] }],
+    [users.deployer, users.user1, 100, { from: users.user1 }],
   ])
   .call('allowance', 'allowance balances are correct after 3rd (failed) withdraw', [
-    [[accounts[0], accounts[1]], [60]],
+    [[users.deployer, users.user1], [60]],
   ])
   .call('balanceOf', 'actual balances are correct after 3rd (failed) withdraw', {
-    [accounts[0]]: initialAmount - 40,
-    [accounts[1]]: 40,
+    [users.deployer]: initialAmount - 40,
+    [users.user1]: 40,
   })
   // approvals: attempt withdrawal from acconut with no allowance (should fail)
   .call('transferFrom', 'attempt to call withdraw from zero allowance fails', [
-    [[accounts[0], accounts[2], 5, { from: accounts[2] }], [false]],
+    [[users.deployer, users.user2, 5, { from: users.user2 }], [false]],
   ])
   .call('transferFrom', 'attempt to transact withdraw from zero allowance doesnt throw', [
-    [accounts[0], accounts[2], 5, { from: accounts[2] }],
+    [users.deployer, users.user2, 5, { from: users.user2 }],
   ])
   .call('balanceOf', 'actual balance after failed withdraw attempt is zero', {
-    [accounts[2]]: 0,
+    [users.user2]: 0,
   })
   // 4th witdhrawl should fail (zero allowance after having one)
   .watch('Approval', 'fires when user is approved', [
-    { _owner: accounts[0], _spender: accounts[1], _value: 0 },
+    { _owner: users.deployer, _spender: users.user1, _value: 0 },
   ])
   .tx('approve', 'allowance transaction succeeds', [
-    [accounts[1], 0, { from: accounts[0] }],
+    [users.user1, 0, { from: users.deployer }],
   ])
   .call('allowance', 'allowance balances are correct after setting balance', [
-    [[accounts[0], accounts[1]], [0]],
+    [[users.deployer, users.user1], [0]],
   ])
   .call('transferFrom', 'attempt to call withdraw from zero allowance fails', [
-    [[accounts[0], accounts[1], 20, { from: accounts[1] }], [false]],
+    [[users.deployer, users.user1, 20, { from: users.user1 }], [false]],
   ])
   .tx('transferFrom', '3rd (failed) withdraw does not throw', [
-    [accounts[0], accounts[1], 20, { from: accounts[1] }],
+    [users.deployer, users.user1, 20, { from: users.user1 }],
   ])
   .call('balanceOf', 'actual balances are correct after 4th (failed) withdraw', {
-    [accounts[0]]: initialAmount - 40,
-    [accounts[1]]: 40,
+    [users.deployer]: initialAmount - 40,
+    [users.user1]: 40,
   })
   .done();
 }

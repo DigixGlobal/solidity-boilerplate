@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node ./scripts/watch-tests.js",
     "test": "node ./node_modules/truffle/cli.js test test/index.js",
-    "server": "testrpc -p 6545",
+    "server": "testrpc -p 6545 -v",
     "testsuite": "npm run server & npm run test",
     "console": "node ./node_modules/truffle/cli.js console --network development",
     "compile": "rm -rf ./build; node ./node_modules/truffle/cli.js compile --network development",

@@ -4,6 +4,10 @@ extends:
 settings:
   ecmascript: 6
 
+parserOptions:
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
+
 env:
   mocha: true
 
