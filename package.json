@@ -29,5 +29,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DigixGlobal/solidity-boilerplate.git"
+  },
+  "dependencies": {
+    "@digix/math": "0.0.1"
   }
 }

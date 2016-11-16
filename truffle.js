@@ -11,7 +11,7 @@ module.exports = {
     },
     morden: {
       network_id: 2,        // Official Ethereum test network
-      host: '172.16.47.10', // Random IP for example purposes (do not use)
+      host: 'localhost', // Random IP for example purposes (do not use)
       port: 8545,
     },
     staging: {

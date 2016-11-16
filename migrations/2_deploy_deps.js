@@ -1,18 +1,9 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-undef, no-param-reassign */
+const DigixMath = require('../node_modules/@digix/math/build/contracts/DigixMath.sol.js');
 
 module.exports = (deployer) => {
-  deployer.deploy([
-    DigixMath,
-    DoublyLinkedList,
-  ]);
-  deployer.deploy([
-    ACGroups,
-    ACConditions,
-    ACDates,
-    ACOwned,
-    ACSimpleMutex,
-    ACState,
-    ACUserMutex,
-  ]);
-  deployer.deploy(ContractResolver);
+  // add DigixMath to known contracts;
+  DigixMath.setNetwork(deployer.network_id);
+  deployer.known_contracts.DigixMath = DigixMath;
+  deployer.deploy(DigixMathTester);
 };
