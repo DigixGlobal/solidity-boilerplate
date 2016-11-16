@@ -1,4 +1,6 @@
-module.exports = {
+const sigmate = require('./node_modules/@digix/sigmate');
+
+module.exports = sigmate.truffle({
   networks: {
     live: {
       network_id: 1, // Ethereum public network
@@ -11,8 +13,12 @@ module.exports = {
     },
     morden: {
       network_id: 2,        // Official Ethereum test network
-      host: 'localhost', // Random IP for example purposes (do not use)
-      port: 8545,
+      providerUrl: 'https://morden.infura.io/ftFX2a6rGHbiA45c6m0r',
+      gas: 3000000,
+      keystore: {
+        label: 'testing',
+        password: 'testing',
+      },
     },
     staging: {
       network_id: 1337, // custom private network
@@ -27,4 +33,4 @@ module.exports = {
       port: 6545,
     },
   },
-};
+});
