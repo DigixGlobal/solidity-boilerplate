@@ -13,9 +13,9 @@
     "deploy-morden": "node ./node_modules/truffle/cli.js migrate --network morden"
   },
   "devDependencies": {
-    "@digix/contest": "^0.0.1",
-    "@digix/sigmate": "^1.0.3",
-    "@digix/tempo": "^0.0.3",
+    "@digix/contest": "^0.2.0",
+    "@digix/sigmate": "^2.0.1",
+    "@digix/tempo": "0.0.3",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-stage-2": "^6.17.0",
     "chokidar": "^1.6.0",
