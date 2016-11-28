@@ -9,7 +9,8 @@
     "server": "testrpc -p 8546",
     "compile": "rm -rf ./build; node ./node_modules/truffle/cli.js compile --network development",
     "inspect": "node --inspect --debug-brk ./node_modules/truffle/cli.js test",
-    "deploy": "node ./node_modules/truffle/cli.js migrate --reset --network development"
+    "deploy-tests": "node ./node_modules/truffle/cli.js migrate --reset --network development",
+    "deploy-morden": "node ./node_modules/truffle/cli.js migrate --network morden"
   },
   "devDependencies": {
     "@digix/contest": "^0.0.1",
@@ -24,7 +25,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
     "multi-hash": "^0.1.1",
-    "truffle": "^2.1.0"
+    "truffle": "^3.0.0-3"
   },
   "repository": {
     "type": "git",
