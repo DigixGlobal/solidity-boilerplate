@@ -6,7 +6,7 @@
     "dev": "node ./watch-tests.js",
     "test": "node ./node_modules/truffle/cli.js test test/index.js",
     "console": "node ./node_modules/truffle/cli.js console --network development",
-    "server": "testrpc -p 8546",
+    "test-server": "testrpc -p 6545",
     "compile": "rm -rf ./build; node ./node_modules/truffle/cli.js compile --network development",
     "inspect": "node --inspect --debug-brk ./node_modules/truffle/cli.js test",
     "deploy-tests": "node ./node_modules/truffle/cli.js migrate --reset --network development",
