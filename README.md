@@ -7,11 +7,11 @@ Boilerplate project for Ethereum's Solidity programming language.
 ## Usage
 
 * Have node installed
-* `npm i -g truffle ethereumjs-testrpc`
-* Clone this repo
-* Run `testrpc`
-* In another window run `truffle test`
-* TODO: `truffle deploy` for different networks
+* `npm i -g ethereumjs-testrpc`
+* Clone this repo, `npm i`
+* Run `npm run test-server`
+* In one window run `npm run deploy-tests; npm run test;`
+* `npm run deploy-morden` for different networks
 
 ## TODO
 
