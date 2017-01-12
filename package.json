@@ -3,19 +3,23 @@
   "version": "0.0.1",
   "description": "Project boilerplate for Ethereum's Solidity programming language with truffle",
   "scripts": {
-    "dev": "node ./watch-ests.js",
-    "test": "node ./node_modules/truffle/cli.js test test/index.js",
-    "console": "node ./node_modules/truffle/cli.js console --network development",
-    "test-server": "testrpc -p 6545",
-    "compile": "rm -rf ./build; node ./node_modules/truffle/cli.js compile --network development",
+    "dev": "node ./scripts/watch-tests.js",
+    "test-server": "./node_modules/.bin/testrpc -p 6545 --verbose",
+    "test-server-attach": "geth attach http://localhost:6545",
+    "run-tests": "node ./node_modules/truffle/cli.js test",
     "inspect": "node --inspect --debug-brk ./node_modules/truffle/cli.js test",
-    "deploy-tests": "node ./node_modules/truffle/cli.js migrate --reset --network development",
-    "deploy-morden": "node ./node_modules/truffle/cli.js migrate --reset --network morden"
+    "console": "node ./node_modules/truffle/cli.js console",
+    "compile": "node ./node_modules/truffle/cli.js compile --reset",
+    "deploy": "node ./node_modules/truffle/cli.js migrate --reset",
+    "test": "npm run test-server && npm run compile && npm run deploy && npm run run-tests",
+    "console-testnet": "node ./node_modules/truffle/cli.js console --network testnet",
+    "compile-testnet": "node ./node_modules/truffle/cli.js compile --reset --network testnet",
+    "deploy-testnet": "node ./node_modules/truffle/cli.js migrate --reset --network testnet"
   },
   "devDependencies": {
     "@digix/contest": "^0.2.0",
-    "@digix/sigmate": "^2.0.3",
-    "@digix/tempo": "^0.0.3",
+    "@digix/sigmate": "^2.1.5-dev",
+    "@digix/tempo": "0.0.3",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-stage-2": "^6.17.0",
     "chokidar": "^1.6.0",
@@ -24,8 +28,9 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
+    "ethereumjs-testrpc": "^3.0.3",
     "multi-hash": "^0.1.1",
-    "truffle": "3.0.0-3"
+    "truffle": "git://github.com/hitchcott/truffle.git#d43783038f3f5ae39df83a2551243ad8184c7748"
   },
   "repository": {
     "type": "git",
