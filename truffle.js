@@ -18,5 +18,9 @@ module.exports = sigmate.truffle({
       network_id: 'default',
       rpcUrl: 'http://localhost:6545',
     }),
+    test: sigmate.config({
+      network_id: 'default',
+      rpcUrl: 'http://localhost:6545',
+    }),
   },
 });
