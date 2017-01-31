@@ -4,9 +4,11 @@ const exec = require('child_process').exec;
 
 let running = false;
 
+console.log('watching...', process.env.PWD);
+
 chokidar.watch([
-  path.join(__dirname, 'test/**/*'),
-  path.join(__dirname, 'contracts/**/*'),
+  path.join(process.env.PWD, 'test/**/*'),
+  path.join(process.env.PWD, 'contracts/**/*'),
 ], {
   ignored: /[\/\\]\./, // Ignore files prefixed with "."
   ignoreInitial: false,
@@ -15,7 +17,7 @@ chokidar.watch([
   running = true;
   const startTime = new Date();
   process.stdout.write('Running Tests...\n');
-  const truffleTests = exec('npm run test');
+  const truffleTests = exec('npm run run-tests');
   truffleTests.stdout.on('data', (data) => {
     process.stdout.write(data);
   });
