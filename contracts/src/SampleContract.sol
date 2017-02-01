@@ -8,6 +8,7 @@ contract SampleContract {
   struct Data {
     address user;
     uint256 age;
+    uint256 last_update;
     bool active;
   }
 
@@ -31,6 +32,7 @@ contract SampleContract {
     dataCollection[dataid].user = _user;
     dataCollection[dataid].age = _age;
     dataCollection[dataid].active = _isactive;
+    dataCollection[dataid].last_update = now;
     _success = true;
     return _success;
   }
@@ -42,7 +44,14 @@ contract SampleContract {
 
   function updateAge(uint256 _dataid, uint256 _age) ifOwner returns (bool _success) {
     dataCollection[_dataid].age = _age;
+    dataCollection[_dataid].last_update = now;
     _success = true;
     return _success;
   }
+
+  function daysSinceLastUpdate(uint256 _dataid) returns (uint256 _days) {
+    _days = (now - dataCollection[_dataid].last_update) / 1 days;
+    return _days;
+  }
+
 }
