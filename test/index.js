@@ -60,6 +60,11 @@ contract('SampleContract', function (accounts) {
       [[0], [0]],
       [[1], [0]],
     ])
+    .then(() => tempo.waitForBlocks(1, 100))
+    .call('daysSinceLastUpdate', `returns zero days for any time less than ${ONE_DAY_IN_SECONDS}`, [
+      [[0], [0]],
+      [[1], [0]],
+    ])
     .then(() => tempo.waitForBlocks(1, ONE_DAY_IN_SECONDS * 3))
     .call('daysSinceLastUpdate', 'returns correct number of days after waiting 3 days', [
       [[0], [3]],
