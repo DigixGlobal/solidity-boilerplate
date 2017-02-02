@@ -1,8 +1,19 @@
 /* globals SampleContract */
 import Contest from '@digix/contest';
+import { ONE_DAY_IN_SECONDS } from '@digix/contest/lib/helpers';
+import Tempo from '@digix/tempo';
+
+let tempo;
 const contest = new Contest({ debug: true });
 
 contract('SampleContract', function (accounts) {
+  before(function (done) {
+    // set up tempo
+    return new Tempo(web3).then((instance) => {
+      tempo = instance;
+      done();
+    });
+  });
   // needs to be be inside an `it` block for truffle to be ready
   it('', function () {
     contest
@@ -43,6 +54,21 @@ contract('SampleContract', function (accounts) {
     .call('getData', 'correct values are set after updateAge', [
       [[0], ['0x1111111111111111111111111111111111111111', 11, false]],
       [[1], ['0x2222222222222222222222222222222222222222', 21, true]],
+    ])
+    .describe('time sensitive actions')
+    .call('daysSinceLastUpdate', 'returns zero days immediately after update', [
+      [[0], [0]],
+      [[1], [0]],
+    ])
+    .then(() => tempo.waitForBlocks(1, ONE_DAY_IN_SECONDS * 3))
+    .call('daysSinceLastUpdate', 'returns correct number of days after waiting 3 days', [
+      [[0], [3]],
+      [[1], [3]],
+    ])
+    .then(() => tempo.waitForBlocks(1, ONE_DAY_IN_SECONDS))
+    .call('daysSinceLastUpdate', 'returns correct number of days after waiting another day', [
+      [[0], [4]],
+      [[1], [4]],
     ])
     .done();
   });
