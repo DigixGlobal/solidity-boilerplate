@@ -156,14 +156,6 @@
       },
       "address": "0xb33a09910ffe3155aa59f0014a089518c8a6ecbd",
       "updated_at": 1486637329376
-    },
-    "1486632849783": {
-      "events": {},
-      "links": {
-        "MathUtils": "0x7f70988223f72b2a3d043a1cead30ee187c838c8"
-      },
-      "address": "0xd29846dfa4333262493863d8a8b090513c0de27c",
-      "updated_at": 1486635323294
     }
   },
   "schema_version": "0.0.5",
