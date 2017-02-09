@@ -1,0 +1,221 @@
+{
+  "contract_name": "MathUtils",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_a",
+          "type": "uint256"
+        },
+        {
+          "name": "_b",
+          "type": "uint256"
+        }
+      ],
+      "name": "subtract",
+      "outputs": [
+        {
+          "name": "_result",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_current_time",
+          "type": "uint256"
+        },
+        {
+          "name": "_last_payment_date",
+          "type": "uint256"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "_minimum_for_demurrage",
+          "type": "uint256"
+        },
+        {
+          "name": "_demurrage_rate",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_demurrage_info",
+      "outputs": [
+        {
+          "name": "_demurrage_fee",
+          "type": "uint256"
+        },
+        {
+          "name": "_demurrage_days",
+          "type": "uint256"
+        },
+        {
+          "name": "_billable_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "_next_payment_date",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_a",
+          "type": "uint256"
+        },
+        {
+          "name": "_b",
+          "type": "uint256"
+        }
+      ],
+      "name": "add",
+      "outputs": [
+        {
+          "name": "_result",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_sending_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "_minimum_sending_unit",
+          "type": "uint256"
+        },
+        {
+          "name": "_tx_fee_per_unit",
+          "type": "uint256"
+        }
+      ],
+      "name": "get_tx_fee",
+      "outputs": [
+        {
+          "name": "_tx_fee",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_a",
+          "type": "uint256"
+        },
+        {
+          "name": "_b",
+          "type": "uint256"
+        }
+      ],
+      "name": "is_safe_to_add",
+      "outputs": [
+        {
+          "name": "_is_safe",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_a",
+          "type": "uint256"
+        },
+        {
+          "name": "_b",
+          "type": "uint256"
+        },
+        {
+          "name": "_places",
+          "type": "uint256"
+        }
+      ],
+      "name": "rate_of",
+      "outputs": [
+        {
+          "name": "_result",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_a",
+          "type": "uint256"
+        },
+        {
+          "name": "_b",
+          "type": "uint256"
+        }
+      ],
+      "name": "is_safe_to_subtract",
+      "outputs": [
+        {
+          "name": "_is_safe",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_amount",
+          "type": "uint256"
+        },
+        {
+          "name": "_baserate",
+          "type": "uint256"
+        },
+        {
+          "name": "_places",
+          "type": "uint256"
+        }
+      ],
+      "name": "from_rate",
+      "outputs": [
+        {
+          "name": "_fee",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x606060405234610000575b6102e2806100196000396000f300606060405236156100725763ffffffff60e060020a6000350416633ef5e44581146100775780634e5e56e814610097578063771602f7146100d4578063a1b3140d146100f4578063a7387d8714610117578063c7f4935814610139578063d03f37e71461015c578063d9abd7e11461017e575b610000565b6100856004356024356101a1565b60408051918252519081900360200190f35b6100ae6004356024356044356064356084356101ca565b604080519485526020850193909352838301919091526060830152519081900360800190f35b610085600435602435610221565b60408051918252519081900360200190f35b61008560043560243560443561024a565b60408051918252519081900360200190f35b610125600435602435610261565b604080519115158252519081900360200190f35b61008560043560243560443561026f565b60408051918252519081900360200190f35b610125600435602435610291565b604080519115158252519081900360200190f35b61008560043560243560443561029c565b60408051918252519081900360200190f35b600082826101af8282610291565b15156101ba57610000565b83850392505b5b5b505092915050565b6000620151808587030481808086888115610000570492508315156101f55760009450889150610213565b8284028602945062015180898b03069050808462015180028a010391505b5b5095509550955095915050565b6000828261022f8282610261565b151561023a57610000565b84840192505b5b5b505092915050565b6000818385811561000057040290505b9392505050565b808201829010155b92915050565b6000600a82900a8360028104868302018115610000570491505b509392505050565b818111155b92915050565b600081600a0a8385028115610000570490505b93925050505600a165627a7a723058200530238276d90808e472b364d561932c759555c30e9c5ea9a28e06ae14b939890029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1486636886589
+}

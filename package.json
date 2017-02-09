@@ -3,39 +3,30 @@
   "version": "0.0.1",
   "description": "Project boilerplate for Ethereum's Solidity programming language with truffle",
   "scripts": {
-    "dev": "node ./scripts/watch-tests.js",
-    "rpc-server": "./node_modules/.bin/testrpc -p 6545 --verbose",
-    "attach": "geth attach http://localhost:6545",
-    "run-tests": "node ./node_modules/truffle/cli.js test",
-    "inspect": "node --inspect --debug-brk ./node_modules/truffle/cli.js test",
-    "console": "node ./node_modules/truffle/cli.js console --network test",
-    "compile": "node ./node_modules/truffle/cli.js compile --network test",
-    "deploy": "node ./node_modules/truffle/cli.js migrate --reset --network test",
-    "console-testnet": "node ./node_modules/truffle/cli.js console --network testnet",
-    "compile-testnet": "node ./node_modules/truffle/cli.js compile --reset --network testnet",
-    "deploy-testnet": "node ./node_modules/truffle/cli.js migrate --reset --network testnet"
+    "truffle": "node ./node_modules/truffle/cli.js",
+    "test": "npm run truffle -- test --network test",
+    "test-server": "./node_modules/.bin/testrpc -p 6545 --verbose",
+    "test-server-attach": "geth attach http://localhost:6545",
+    "develop": "node ./scripts/watch-tests.js"
   },
   "devDependencies": {
-    "@digix/contest": "^0.2.2",
-    "@digix/sigmate": "^2.2.0",
-    "@digix/tempo": "^0.0.3",
-    "babel-preset-es2015": "^6.16.0",
-    "babel-preset-stage-2": "^6.17.0",
-    "chokidar": "^1.6.0",
-    "eslint": "^3.7.1",
-    "eslint-config-airbnb": "^12.0.0",
-    "eslint-plugin-import": "^1.16.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1",
+    "@digix/contest": "^0.2.6",
+    "@digix/truffle-lightwallet-provider": "0.0.8",
+    "chokidar": "^1.6.1",
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0",
     "ethereumjs-testrpc": "^3.0.3",
-    "multi-hash": "^0.1.1",
-    "truffle": "git://github.com/hitchcott/truffle.git#d43783038f3f5ae39df83a2551243ad8184c7748"
+    "truffle": "^3.1.1",
+    "truffle-contract": "git://github.com/DigixGlobal/truffle-contract.git#29d8151584fce2b5cfe01da16b26270fa8934798"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DigixGlobal/solidity-boilerplate.git"
   },
   "dependencies": {
-    "@digix/math": "0.0.1"
+    "@digix/solidity-core-libraries": "0.0.9"
   }
 }
