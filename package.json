@@ -12,7 +12,7 @@
   "devDependencies": {
     "@digix/contest": "^0.2.6",
     "@digix/truffle-console-helpers": "^0.0.1",
-    "@digix/truffle-lightwallet-provider": "^0.0.8",
+    "@digix/truffle-lightwallet-provider": "^0.0.11",
     "chokidar": "^1.6.1",
     "eslint": "^3.14.1",
     "eslint-config-airbnb": "^14.0.0",
@@ -22,7 +22,7 @@
     "ethereumjs-testrpc": "^3.0.3",
     "truffle": "3.1.1",
     "truffle-compile": "1.0.0",
-    "truffle-contract": "git://github.com/DigixGlobal/truffle-contract.git#29d8151584fce2b5cfe01da16b26270fa8934798"
+    "truffle-contract": "1.1.10"
   },
   "repository": {
     "type": "git",
